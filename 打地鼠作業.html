@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background: url(./背景1.png);
+            background-size: cover;
+        }
+
+        #map {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+        }
+
+        #main {
+            position: absolute;
+            bottom: 10px;
+        }
+
+        h3 {
+            color: blanchedalmond;
+            opacity: 0.5;
+            font-size: 36px;
+            font-family: 微軟正黑體;
+            margin: 10px;
+        }
+
+        .w1 {
+            color: blanchedalmond;
+            font-size: 20px;
+            position: absolute;
+            left: 45%;
+        }
+
+        .w2 {
+            color: blanchedalmond;
+            font-size: 20px;
+            position: absolute;
+            left: 55%;
+        }
+
+        .ab_center {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .logo {
+            width: 250px;
+            height: 200px;
+            background: url(./logo1.png);
+            background-size: 250px 200px;
+            margin: auto;
+        }
+
+        .read {
+            color: blanchedalmond;
+            text-align: center;
+            font-family: 微軟正黑體;
+        }
+
+        .s1 {
+            width: 150px;
+            height: 150px;
+
+        }
+
+        .hole {
+            width: 150px;
+            height: 150px;
+            cursor: url(./日輪刀.png) 50 50, auto;
+            overflow: hidden;
+        }
+
+        .hole:active {
+            cursor: url(./日輪刀2.png) 50 50, auto;
+        }
+
+        .door {
+            width: 150px;
+            height: 150px;
+            background-image: url(箱子.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .open {
+            animation: open 2s alternate;
+        }
+
+
+        .good {
+            background: url(迷豆子.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+
+        }
+
+        .good2 {
+            background: url(迷豆子2.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+
+        }
+
+        .bad {
+            background: url(鬼.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .bad2 {
+            background: url(鬼2.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+
+        @keyframes open {
+            form {
+                transform: translateX(0px);
+            }
+
+            50% {
+                transform: translateX(-150px);
+            }
+
+            to {
+                transform: translateX(0px);
+            }
+        }
+
+        @keyframes close {
+            form {
+                transform: translateX(-150px);
+            }
+
+            to {
+                transform: translateX(0px);
+            }
+        }
+
+        @keyframes rotote {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-50deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map">
+        <div class="logo"></div>
+        <br>
+        <br>
+        <span class="w1">時間:<span id="text-time">30</span></span>
+        <span class="w2">分數:<span id="text-score">0</span></span>
+        <div id="main">
+            <table border="1" class="read">
+                <tr>
+                    <td style="width: 100px;">圖示</td>
+                    <td style="text-align: center;"><img src="鬼.png" alt="" class="s1"></td>
+                    <td style="text-align: center;"><img src="迷豆子.png" alt="" class="s1"></td>
+                </tr>
+                <tr>
+                    <td style="width: 100px;">得分</td>
+                    <td>+1</td>
+                    <td>-1</td>
+                </tr>
+            </table>
+            <h3 id="start">開始遊戲:S</h3>
+            <!-- <h3 id="re">重新開始:R</h3> -->
+
+        </div>
+        <table id="game" class="ab_center">
+            <tr>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+                <td class="hole">
+                    <div class="door"></div>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+    <script>
+        const holes = document.getElementsByClassName("hole")
+        const textTime = document.getElementById("text-time")
+        const start = document.getElementById("start")
+        const re = document.getElementById("re")
+        const door = document.getElementsByClassName("door")
+        const textScore = document.getElementById("text-score")
+
+        let ingame = false
+        let score = 0
+        let timeleft = 30
+        let timer = 0
+
+        // 開始按鈕
+        document.onkeydown = (eve) => {
+            let key = eve.key;
+            if (key == "s" && !ingame) {
+                timeleft = 30
+                ingame = true;
+                timer = setInterval(game, 1000);
+                dooropen = setInterval(dooropen, 2000)
+                game();
+                opens();
+                score = 0;
+            }
+            // else if (key == "r") {
+            //     regame()
+            // }
+        }
+        // const regame = () => {
+        //     ingame = false;
+        //     score = 0;
+        //     textScore.innerText = score
+        //     timeleft = 30
+        //     textTime.innerText = timeleft
+        //     clearInterval(timer);
+        //     clearInterval(dooropen);
+        //     for (let i of door) {
+        //         i.classList.remove("opens")
+        //     }
+        // }
+
+        // 遊戲開始動作
+        const game = () => {
+            timeleft--;
+            textTime.innerText = timeleft;
+            if (timeleft == 0) {
+                ingame = false;
+                clearInterval(timer);
+                clearInterval(dooropen);
+                setTimeout(() => {
+                    alert(`恭喜你得到${score}`);
+                }, 100);
+            }
+
+        }
+        // 開門動作
+        const dooropen = () => {
+            for (let i of holes) {
+                i.classList.remove("good")
+                i.classList.remove("bad")
+                i.classList.remove("good2")
+                i.classList.remove("bad2")
+            }
+            for (let i of door) {
+                i.classList.remove("open")
+            }
+            for (let i = 0; i < 4; i++) {
+                let rand = Math.floor(Math.random() * 9)
+                let rand2 = Math.floor(Math.random() * 9)
+                holes[rand].classList.add('good')
+                door[rand].classList.add('open')
+                if (holes[rand2].classList.contains('good') == false) {
+                    holes[rand2].classList.add('bad')
+                    door[rand2].classList.add('open')
+                }
+            }
+            if (timeleft == 0) {
+                ingame = false;
+                for (let i of door) {
+                    i.classList.remove("open")
+                }
+            }
+        }
+        // 換圖
+        for (let i of holes) {
+            i.onclick = () => {
+                if (ingame && i.classList.contains("bad")) {
+                    i.classList.add("bad2")
+                    i.classList.remove("bad")
+                    score++;
+                    textScore.innerText = score;
+                }
+                if (ingame && i.classList.contains("good")) {
+                    i.classList.add("good2")
+                    i.classList.remove("good")
+                    score--;
+                    textScore.innerText = score;
+                }
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>
